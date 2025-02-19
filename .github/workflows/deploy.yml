@@ -24,10 +24,10 @@ jobs:
 
       - name: Validate Key File
         run: |
-            echo "Private key contents:"
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -n 2
-            echo "Key type:"
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-keygen -t -f /dev/stdin
+            echo "Private key header:"
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -n 1
+            echo "Key fingerprint:"
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-keygen -l -f /dev/stdin
         
       - name: Test SSH Connection
         run: |
