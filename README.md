@@ -233,6 +233,6 @@ sudo tail -f /opt/lampp/logs/access_log
 ## License
 MIT License - See [LICENSE](/LICENSE) for details.
 
-**Author:** yourDomain Philip Njoku
-**Contact:** philznjoku@gmail.com
-**Live Demo:** https://anamelechi.com.com
+- **Author:** yourDomain Philip Njoku
+- **Contact:** philznjoku@gmail.com
+- **Live Demo:** https://anamelechi.com.com
