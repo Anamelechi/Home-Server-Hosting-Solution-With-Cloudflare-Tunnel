@@ -235,4 +235,4 @@ MIT License - See [LICENSE](/LICENSE) for details.
 
 - **Author:** yourDomain Philip Njoku
 - **Contact:** philznjoku@gmail.com
-- **Live Demo:** https://anamelechi.com.com
+- **Live Demo:** https://anamelechi.com
