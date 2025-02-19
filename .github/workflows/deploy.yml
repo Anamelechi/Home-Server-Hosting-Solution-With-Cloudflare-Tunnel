@@ -27,7 +27,7 @@ jobs:
             echo "Private key header:"
             echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -n 1
             echo "Key fingerprint:"
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-keygen -l -f /dev/stdin
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-keygen -l -f /Users/alessiacalabro/.ssh/deploy-key
         
       - name: Test SSH Connection
         run: |
