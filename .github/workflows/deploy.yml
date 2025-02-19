@@ -11,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Lint HTML
+      - name: HTML Validation
         run: |
           npm install -g htmlhint
           htmlhint website/**/*.html
