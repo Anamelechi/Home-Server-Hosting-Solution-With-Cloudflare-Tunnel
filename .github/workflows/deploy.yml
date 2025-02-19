@@ -22,10 +22,29 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Rsync Deployment
+      - name: Validate Key File
         run: |
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" \
-            website/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/lampp/htdocs/
+            echo "Private key contents:"
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -n 2
+            echo "Key type:"
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-keygen -t -f /dev/stdin
+        
+      - name: Test SSH Connection
+        run: |
+             ssh -vvv -o StrictHostKeyChecking=no \
+             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+             "echo 'Connection successful!'"
+       
+      - name: Clean Server Directory
+        run: |
+              ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+              "sudo rm -rf /opt/lampp/htdocs/* && sudo mkdir -p /opt/lampp/htdocs"       
+
+      - name: Deploy via SSH & Rsync
+        run: |
+              rsync -avz --delete --no-perms --chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r \
+              -e "ssh -o StrictHostKeyChecking=no" \
+              ./website/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/lampp/htdocs/
 
       - name: Reload Apache
         run: |
