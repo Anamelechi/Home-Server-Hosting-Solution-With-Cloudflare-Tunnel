@@ -41,10 +41,10 @@ jobs:
         env:
           SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}  
 
-      - name: Deploy via SSH & Rsync
+      - name: Deploy
         run: |
-               rsync -avz --delete --no-perms -e "ssh" \
-               ./website/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/lampp/htdocs/
+            rsync -avz --delete -e "ssh" \
+              ./website/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/lampp/htdocs/
 
       - name: Reload Apache
         run: |
