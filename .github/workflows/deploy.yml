@@ -36,8 +36,10 @@ jobs:
        
       - name: Clean Server Directory
         run: |
-              ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-              "sudo rm -rf /opt/lampp/htdocs/* && sudo mkdir -p /opt/lampp/htdocs"       
+               ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+                 "sudo -S rm -rf /opt/lampp/htdocs/* && sudo mkdir -p /opt/lampp/htdocs"
+        env:
+          SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}  
 
       - name: Deploy via SSH & Rsync
         run: |
