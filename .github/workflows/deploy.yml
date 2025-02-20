@@ -36,7 +36,7 @@ jobs:
        
       - name: Clean Server Directory
         run: |
-               ssh -o StrictHostKeyChecking=no -t ciuser@host 'sudo rm -rf /opt/lampp/htdocs/* && sudo mkdir -p /opt/lampp/htdocs'
+               ssh -o StrictHostKeyChecking=no -t anamelechi@anamelechi.ddns.net 'sudo rm -rf /opt/lampp/htdocs/* && sudo mkdir -p /opt/lampp/htdocs'
 
         env:
           SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}  
