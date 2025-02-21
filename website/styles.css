@@ -1,100 +1,102 @@
-/* Sliding Text Button Styles */
-button.SlidingText_wrapper__U5OWX {
-    background: none;
-    border: none;
+:root {
+    --bg: #0a0a0a;
+    --surface: #151515;
+    --surface2: #252525;
+    --text: #ffffff;
+    --text2: #888888;
+    --accent: #7c3aed;
+    --accent2: #9f7aea;
+    --font-primary: 'Inter', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
     padding: 0;
-    font: inherit;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
   }
   
-  .SlidingText_letter__n0q0_ {
-    position: relative;
-    display: inline-block;
-    transition: transform 0.3s ease;
+  html {
+    scroll-behavior: smooth;
   }
   
-  .SlidingText_letter__n0q0_ span {
-    position: absolute;
-    left: 0;
-    transition: transform 0.3s ease;
-  }
-  
-  button:hover .SlidingText_letter__n0q0_ {
-    transform: translateY(-100%);
-  }
-  
-  button:hover .SlidingText_letter__n0q0_ span {
-    transform: translateY(100%);
-  }
-  
-  /* Footer Styles */
-  footer {
-    position: relative;
-    margin-top: 8rem;
-    padding: 4rem 0;
-    background: linear-gradient(160deg, var(--surface2), var(--bg));
-  }
-  
-  .Footer_contact__W4Ld2 h4 {
-    font-size: 1.25rem;
-    color: var(--text2);
-    margin-bottom: 1.5rem;
-  }
-  
-  .Footer_socials__nBPiT {
-    display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  
-  /* Navigation Styles */
-  nav.Nav_outer__uK61I {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--surface);
-    padding: 0.75rem 1.5rem;
-    border-radius: 30px;
-    z-index: 100;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-  }
-  
-  .Nav_itemsContainer___lh0S {
-    display: flex;
-    gap: 2rem;
-    position: relative;
-  }
-  
-  .Nav_background__uyJNl {
-    position: absolute;
-    height: 100%;
-    background: var(--surface2);
-    transition: all 0.3s ease;
-  }
-  
-  .Item_item__h59_f a {
-    color: var(--text2);
-    transition: color 0.3s ease;
-  }
-  
-  .Item_item__h59_f a:hover {
+  body {
+    font-family: var(--font-primary);
+    background: var(--bg);
     color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
   
-  /* Project Card Enhancements */
-  .PostPreview_container__tNXvR {
+  header {
+    text-align: center;
+    margin: 4rem 0;
+    padding: 4rem 0;
     position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.1);
   }
   
-  .PostPreview_container__tNXvR::before {
+  h1 {
+    font-size: 4.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(45deg, var(--text), var(--text2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    color: var(--text2);
+    font-weight: 400;
+    margin-top: 1rem;
+  }
+  
+  section {
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    padding: 2rem;
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  
+  section:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  
+  .contact {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin: 3rem auto;
+    max-width: 800px;
+  }
+  
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 1.5rem 0;
+  }
+  
+  .job, .project {
+    padding: 1.5rem;
+    margin: 2rem 0;
+    background: var(--surface2);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+  }
+  
+  .job::before, .project::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -105,43 +107,81 @@ button.SlidingText_wrapper__U5OWX {
     transition: opacity 0.3s ease;
   }
   
-  .PostPreview_container__tNXvR:hover::before {
+  .job:hover::before, .project:hover::before {
     opacity: 1;
   }
   
-  .PostPreview_description__6tnHw {
+  .date {
     color: var(--text2);
-    font-size: 0.925rem;
-    line-height: 1.7;
-    margin: 1rem 0;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: block;
   }
   
-  /* Gradient Overlay Effects */
-  .page_gradient__f9H4O {
-    position: fixed;
-    top: 0;
+  a {
+    color: var(--accent2);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s ease;
+  }
+  
+  a:hover {
+    color: var(--accent);
+  }
+  
+  a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
     left: 0;
-    width: 100%;
-    height: 100vh;
-    background: radial-gradient(circle at 50% 50%, 
-      rgba(124,58,237,0.15), 
-      rgba(0,0,0,0));
-    pointer-events: none;
-    z-index: -1;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s ease;
   }
   
-  /* Responsive Tweaks */
-  @media (max-width: 640px) {
-    nav.Nav_outer__uK61I {
-      bottom: 1rem;
-      padding: 0.5rem 1rem;
+  a:hover::after {
+    width: 100%;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 4rem 0;
+    margin-top: 8rem;
+    background: linear-gradient(160deg, var(--surface2), var(--bg));
+    position: relative;
+  }
+  
+  footer p {
+    color: var(--text2);
+    margin: 0.5rem 0;
+    font-family: var(--font-mono);
+  }
+  
+  footer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    body {
+      padding: 1rem;
     }
-    
-    .Nav_itemsContainer___lh0S {
-      gap: 1.5rem;
+  
+    h1 {
+      font-size: 3rem;
     }
-    
-    footer {
-      padding: 3rem 0;
+  
+    section {
+      padding: 1.5rem;
+      margin: 0 auto 3rem;
+    }
+  
+    .contact {
+      grid-template-columns: 1fr;
     }
   }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono&display=swap');
