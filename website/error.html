@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found - Anamelechi Philip Njoku</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found - Anamelechi Philip Njoku</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header>
-        <h1>ANAMELECHI PHILIP NJOKU</h1>
-        <h2>Junior Cloud Architect</h2>
+  <div class="page_wrapper">
+    <!-- Hero for error page (with an accent gradient) -->
+    <header class="hero" style="background: linear-gradient(135deg, var(--accent-color), var(--primary-color));">
+      <h1 style="font-size: 3em; margin: 0;">ANAMELECHI PHILIP NJOKU</h1>
+      <h2 style="font-size: 1.5em; margin-top: 10px;">Cloud Engineer</h2>
     </header>
 
-    <section class="error-content">
-        <div class="error-message">
-            <h3>404 - Page Not Found</h3>
-            <p>Oops! The page you're looking for doesn't exist.</p>
-            <p>Return to <a href="/">homepage</a> or contact me directly:</p>
-            <p class="contact-info">
-                📧 philznjoku@gmail.com<br>
-                📞 (+39) 3791224530
-            </p>
+    <!-- Error Message -->
+    <main class="content">
+      <section class="error_section" style="text-align: center; padding: 60px 20px;">
+        <h3 style="color: var(--accent-color); font-size: 2.2em;">404 - Page Not Found</h3>
+        <p style="font-size: 1.1em;">Oops! The page you're looking for doesn't exist.</p>
+        <p style="font-size: 1.1em;">
+          Return to <a href="/" style="color: var(--secondary-color);">homepage</a> or contact me directly:
+        </p>
+        <div class="contact-info" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+          <p>📧 <a href="mailto:philznjoku@gmail.com" style="color: var(--secondary-color);">philznjoku@gmail.com</a></p>
+          <p>📞 (+39) 3791224530</p>
         </div>
-    </section>
+      </section>
+    </main>
 
-    <footer>
-        <p>© 2024 Anamelechi Philip Njoku | 
-           <a href="https://www.linkedin.com/in/anamelechi-philip-njoku-074b5014a/" target="_blank">LinkedIn</a> | 
-           <a href="https://github.com/Anamelechi" target="_blank">GitHub</a></p>
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2024 Anamelechi Philip Njoku</p>
+      <p>Built with 🖤</p>
+      <p>Rome, Italy</p>
     </footer>
+  </div>
 </body>
 </html>
