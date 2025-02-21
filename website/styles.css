@@ -1,4 +1,4 @@
-/* Global Styles & Custom Properties */
+/* Custom Properties & Global Styles */
 :root {
     --primary-color: #2d3436;
     --secondary-color: #0984e3;
@@ -20,14 +20,14 @@
     color: var(--primary-color);
   }
   
-  /* Centering Wrapper */
+  /* Page Wrapper */
   .page_wrapper {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
   }
   
-  /* Hero Header (Gradient Background) */
+  /* Hero Section */
   .hero {
     text-align: center;
     padding: 60px 20px;
@@ -35,62 +35,72 @@
     color: white;
   }
   
-  .hero h1 {
+  .hero .hero_name {
     font-size: 3em;
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 2px;
   }
   
-  .hero h2 {
+  .hero .hero_name span {
+    display: block;
+  }
+  
+  .hero .hero_title {
     font-size: 1.5em;
     margin-top: 10px;
     color: #f5f6fa;
   }
   
-  /* Contact Section – Remains at the top */
-  .contact {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 1.1em;
+  /* Navigation Bar */
+  .nav_bar {
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: -30px auto 40px;
+    max-width: 500px;
+    overflow: hidden;
   }
   
-  .contact a {
-    color: var(--secondary-color);
+  .nav_items {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    margin: 0;
+    padding: 10px 0;
+  }
+  
+  .nav_link {
     text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    position: relative;
+    padding: 5px 10px;
+    transition: color var(--transition-speed);
   }
   
-  .contact a:hover {
-    text-decoration: underline;
+  .nav_link:hover {
+    color: var(--secondary-color);
   }
   
-  /* Section Titles & Content */
-  .profile, .skills, .experience, .education, .projects {
+  /* Section Styling */
+  .section {
     margin-bottom: 60px;
   }
   
-  .profile h3,
-  .skills h3,
-  .experience h3,
-  .education h3,
-  .projects h3 {
+  .section h3 {
     font-size: 2em;
     margin-bottom: 20px;
     border-bottom: 2px solid var(--secondary-color);
     padding-bottom: 5px;
   }
   
-  .profile p,
-  .skills p,
-  .experience p,
-  .education p,
-  .projects p,
-  ul {
+  .section p,
+  .section ul {
     font-size: 1em;
     line-height: 1.6;
   }
   
-  /* Skills Grid (Two Columns) */
   .skills_grid {
     display: flex;
     gap: 20px;
@@ -103,11 +113,12 @@
   }
   
   /* Job & Project Cards */
-  .job, .project {
+  .job,
+  .project {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
   }
   
@@ -116,8 +127,8 @@
     font-size: 0.9em;
   }
   
-  /* Footer Styling */
-  footer {
+  /* Footer */
+  .footer {
     text-align: center;
     padding: 40px 20px;
     background: var(--primary-color);
@@ -125,12 +136,16 @@
     border-radius: 8px;
   }
   
-  footer a {
+  .footer a {
     color: var(--secondary-color);
     text-decoration: none;
   }
   
-  footer p {
+  .footer .footer_contact p {
+    margin: 5px 0;
+  }
+  
+  .footer_bottom p {
     margin: 5px 0;
     font-size: 0.9em;
   }
@@ -140,7 +155,7 @@
     .skills_grid {
       flex-direction: column;
     }
-    .hero h1 {
+    .hero .hero_name {
       font-size: 2.5em;
     }
   }
