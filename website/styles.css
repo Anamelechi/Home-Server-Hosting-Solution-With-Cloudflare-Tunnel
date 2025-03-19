@@ -44,9 +44,10 @@
     border-radius: 50%;
     box-shadow: 0 0 10px var(--secondary-color);
     pointer-events: none;
-    z-index: 100000; /* Ensure it stays on top */
+    z-index: 999999; /* Raised z-index to ensure it stays on top */
     transform: translate(-50%, -50%);
   }
+  
   
   /* Navigation Bar */
   .navbar {
