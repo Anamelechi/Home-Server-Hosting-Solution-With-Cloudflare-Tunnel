@@ -41,14 +41,64 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     localStorage.setItem("theme", newTheme);
   });
   
-  // Tweet Portfolio Button Functionality
-  document.getElementById("tweetBtn").addEventListener("click", () => {
-    const tweetText = encodeURIComponent(
-      "Check out my Cloud Engineer Portfolio by Anamelechi Philip Njoku!"
-    );
-    const tweetUrl = encodeURIComponent(window.location.href);
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${tweetUrl}`;
-    window.open(twitterUrl, "_blank");
+  // Share Modal Functionality
+  const shareBtn = document.getElementById("shareBtn");
+  const shareModal = document.getElementById("shareModal");
+  const closeModal = document.getElementById("closeModal");
+  
+  shareBtn.addEventListener("click", () => {
+    shareModal.style.display = "block";
+  });
+  
+  closeModal.addEventListener("click", () => {
+    shareModal.style.display = "none";
+  });
+  
+  // Close modal if clicked outside the modal content
+  window.addEventListener("click", (e) => {
+    if (e.target === shareModal) {
+      shareModal.style.display = "none";
+    }
+  });
+  
+  // Base share text and URL
+  const shareText = `Check out my Cloud Engineer Portfolio by Anamelechi Philip Njoku: ${window.location.href}`;
+  
+  // LinkedIn Share
+  document.getElementById("shareLinkedIn").addEventListener("click", (e) => {
+    e.preventDefault();
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+    window.open(url, "_blank");
+  });
+  
+  // Instagram Share (Copy link to clipboard)
+  document.getElementById("shareInstagram").addEventListener("click", (e) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert("Profile link copied! Share it on Instagram.");
+    });
+  });
+  
+  // WhatsApp Share
+  document.getElementById("shareWhatsApp").addEventListener("click", (e) => {
+    e.preventDefault();
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+    window.open(url, "_blank");
+  });
+  
+  // SMS Share
+  document.getElementById("shareSMS").addEventListener("click", (e) => {
+    e.preventDefault();
+    const url = `sms:?body=${encodeURIComponent(shareText)}`;
+    window.location.href = url;
+  });
+  
+  // Email Share
+  document.getElementById("shareEmail").addEventListener("click", (e) => {
+    e.preventDefault();
+    const subject = encodeURIComponent("My Cloud Engineer Portfolio");
+    const url = `mailto:?subject=${subject}&body=${encodeURIComponent(shareText)}`;
+    window.location.href = url;
   });
   
   // PDF Download Functionality
