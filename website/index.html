@@ -1,99 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anamelechi Philip Njoku - Cloud Engineer</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anamelechi Philip Njoku - Cloud Engineer</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
 </head>
 <body>
-    <header>
-        <h1>ANAMELECHI PHILIP NJOKU</h1>
-        <h2>Junior Cloud Engineer</h2>
+  <!-- Magic Mouse Element -->
+  <div id="magicMouse"></div>
+
+  <div class="container">
+    <header class="fade-in">
+      <h1>ANAMELECHI PHILIP NJOKU</h1>
+      <h2>Junior Cloud Engineer</h2>
     </header>
 
-    <section class="contact">
-        <p>📍 Rome, Italy<br>
-           📞 (+39) 3791224530<br>
-           📧 philznjoku@gmail.com<br>
-           🔗 <a href="https://www.linkedin.com/in/anamelechi-philip-njoku-074b5014a/" target="_blank">LinkedIn</a> | 
-              <a href="https://github.com/Anamelechi" target="_blank">GitHub</a></p>
+    <!-- Navigation Bar -->
+    <nav class="navbar fade-in">
+      <ul>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><button id="themeToggle" class="nav-btn">Toggle Theme</button></li>
+        <li><button id="tweetBtn" class="nav-btn">Tweet Portfolio</button></li>
+      </ul>
+    </nav>
+
+    <!-- Contact Section -->
+    <section class="contact card slide-up">
+      <div class="contact-info">
+        <p>📍 Rome, Italy</p>
+        <p>📞 (+39) 3791224530</p>
+        <p>📧 <a href="mailto:philznjoku@gmail.com">philznjoku@gmail.com</a></p>
+        <p>
+          🔗 <a href="https://linkedin.com/in/anamelechi-philip-njoku" target="_blank">LinkedIn</a> | 
+          <a href="https://github.com/Anamelechi" target="_blank">GitHub</a>
+        </p>
+      </div>
     </section>
 
-    <section class="profile">
-        <h3>Profile Summary</h3>
-        <p>Innovative and results-driven Cloud Engineer with a proven track record in designing, deploying, and managing scalable, secure cloud infrastructures. Adept at leveraging AWS, Terraform, Docker, and Kubernetes to architect resilient systems that drive business success. Passionate about integrating state-of-the-art CI/CD pipelines and robust security protocols, I combine technical excellence with a commitment to professional integrity. I thrive in fast-paced, challenging environments, consistently delivering innovative, cost-effective cloud solutions that exceed expectations.</p>
+    <!-- Profile Summary -->
+    <section id="profile" class="profile card slide-up">
+      <h3>Profile Summary</h3>
+      <p>Cloud security specialist with expertise in hybrid cloud/on-prem architectures and compliance-focused automation. Provenability to design secure, scalable infrastructure using Infrastructure-as-Code (Terraform/Ansible) and implemententerprise-grade security controls (AWS Network Firewall, KMS, Cloudflare Tunnel). Skilled in optimizing cross-environmentconnectivity and reducing operational overhead through CI/CD pipelines and system hardening.</p>
     </section>
 
-    <section class="skills">
-        <h3>Technical Skills</h3>
-        <div class="skills-grid">
-            <div>
-                <ul>
-                    <li><strong>Cloud Platforms:</strong> AWS (EC2, S3, RDS, VPC, Lambda)</li>
-                    <li><strong>IaC:</strong> Terraform, AWS CloudFormation</li>
-                    <li><strong>CI/CD:</strong> Jenkins, GitLab CI/CD</li>
-                    <li><strong>Containerization:</strong> Docker, Kubernetes</li>
-                </ul>
-            </div>
-            <div>
-                <ul>
-                    <li><strong>Monitoring:</strong> Prometheus, Grafana, ELK Stack</li>
-                    <li><strong>Security:</strong> IAM, encryption, compliance</li>
-                    <li><strong>Scripting:</strong> Bash, Python</li>
-                    <li><strong>Networking:</strong> VPNs, Security Groups</li>
-                </ul>
-            </div>
+    <!-- Technical Skills -->
+    <section id="skills" class="skills card slide-up">
+      <h3>Technical Skills</h3>
+      <div class="skills-grid">
+        <div>
+          <ul>
+            <li><strong>Cloud Platforms:</strong> AWS (EC2, S3, RDS, VPC, Lambda)</li>
+            <li><strong>IaC:</strong> Terraform, AWS CloudFormation</li>
+            <li><strong>CI/CD:</strong> Jenkins, GitLab CI/CD</li>
+            <li><strong>Containerization:</strong> Docker, Kubernetes</li>
+          </ul>
         </div>
+        <div>
+          <ul>
+            <li><strong>Monitoring:</strong> Prometheus, Grafana, ELK Stack</li>
+            <li><strong>Security:</strong> IAM, encryption, compliance</li>
+            <li><strong>Scripting:</strong> Bash, Python</li>
+            <li><strong>Networking:</strong> VPNs, Security Groups</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
-    <section class="experience">
-        <h3>Professional Experience</h3>
-        <div class="job">
-            <h4>Cloud Engineer (Freelance)</h4>
-            <p class="date">January 2020 – Present</p>
-            <ul>
-                <li>Designed scalable cloud infrastructure on AWS</li>
-                <li>Implemented CI/CD pipelines with Jenkins/Docker</li>
-                <li>Managed containerized apps with Kubernetes</li>
-            </ul>
-        </div>
-
-        <div class="job">
-            <h4>ICT Consultant - Cornerstone Business Center</h4>
-            <p class="date">July 2016 – April 2017</p>
-            <ul>
-                <li>Delivered tailored ICT solutions</li>
-                <li>Managed IT infrastructure projects</li>
-            </ul>
-        </div>
-    </section>
-
-    <section class="education">
-        <h3>Education &amp; Certifications</h3>
+    <!-- Professional Experience -->
+    <section id="experience" class="experience card slide-up">
+      <h3>Professional Experience</h3>
+      <div class="job">
+        <h4>Cloud Engineer (Freelance)</h4>
+        <p class="date">January 2020 – Present</p>
         <ul>
-            <li>Bachelor’s in Internet Engineering - Tor Vergata University</li>
-            <li>AWS Certified Solutions Architect – Associate</li>
-            <li>AWS Certified Cloud Practitioner</li>
+          <li>Designed scalable cloud infrastructure on AWS</li>
+          <li>Implemented CI/CD pipelines with Jenkins/Docker</li>
+          <li>Managed containerized apps with Kubernetes</li>
         </ul>
+      </div>
+      <div class="job">
+        <h4>ICT Consultant - Cornerstone Business Center</h4>
+        <p class="date">July 2016 – April 2017</p>
+        <ul>
+          <li>Delivered tailored ICT solutions</li>
+          <li>Managed IT infrastructure projects</li>
+        </ul>
+      </div>
     </section>
 
-    <section class="projects">
-        <h3>Key Projects</h3>
-        <div class="project">
-            <h4>Cloud Infrastructure Deployment</h4>
-            <p>Designed AWS infrastructure with Terraform <a href="https://github.com/Anamelechi" target="_blank">View on GitHub</a></p>
-        </div>
-        <div class="project">
-            <h4>Cruddur Web Application</h4>
-            <p>Twitter-like app deployment <a href="https://github.com/Anamelechi" target="_blank">View on GitHub</a></p>
-        </div>
+    <!-- Education & Certifications -->
+    <section id="education" class="education card slide-up">
+      <h3>Education &amp; Certifications</h3>
+      <ul>
+        <li>Bachelor’s in Internet Engineering - Tor Vergata University</li>
+        <li>AWS Certified Solutions Architect – Associate</li>
+        <li>AWS Certified Cloud Practitioner</li>
+      </ul>
     </section>
 
-    <footer>
-        <p>© 2024 Anamelechi Philip Njoku | 
-           <a href="https://www.linkedin.com/in/anamelechi-philip-njoku-074b5014a/">LinkedIn</a> | 
-           <a href="https://github.com/Anamelechi">GitHub</a></p>
+    <!-- Key Projects -->
+    <section id="projects" class="projects card slide-up">
+      <h3>Key Projects</h3>
+      <div class="project">
+        <h4>Cloud Infrastructure Deployment</h4>
+        <p>Designed AWS infrastructure with Terraform <a href="https://github.com/Anamelechi" target="_blank">View on GitHub</a></p>
+      </div>
+      <div class="project">
+        <h4>Cruddur Web Application</h4>
+        <p>Twitter-like app deployment <a href="https://github.com/Anamelechi" target="_blank">View on GitHub</a></p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="slide-up">
+      <p>© 2024 Anamelechi Philip Njoku</p>
+      <div class="social-links">
+        <a href="https://linkedin.com/in/anamelechi-philip-njoku" target="_blank">LinkedIn</a>
+        <a href="https://github.com/Anamelechi" target="_blank">GitHub</a>
+      </div>
+      <div class="download-container">
+        <button id="downloadBtn" class="download-btn">
+          Download Full CV <span class="download-icon">↓</span>
+        </button>
+      </div>
     </footer>
+  </div>
+
+  <script src="main.js"></script>
+  <script src="magic-mouse.js"></script>
 </body>
 </html>
