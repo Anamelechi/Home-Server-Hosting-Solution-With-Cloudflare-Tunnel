@@ -78,7 +78,7 @@
   }
   .navbar a:hover,
   .nav-btn:hover {
-    color: var(--primary-color);
+    color: rgb(145, 145, 145);
   }
   
   /* Card & Sections */
