@@ -13,6 +13,9 @@ A robust multi-layered infrastructure for hosting static websites from a home Li
 - [Security Layers](#security-layers)
 - [Data Flow](#data-flow)
 - [Installation](#installation)
+- [Configuration](#configuration)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Grafana Dashboards](#grafana-dashboards)
 - [Challenges & Solutions](#challenges--solutions)
 - [FAQ](#faq)
 - [License](#license)
@@ -96,12 +99,14 @@ This project enables secure external access to a home-hosted static website thro
     Prometheus scrapes and stores the collected metrics.
 8. **Grafana Visualization:**
     Grafana queries Prometheus to display the metrics on dashboards.
+9. **CI/CD Pipeline Trigger:**
+    Pushing changes to the `main` branch of the website's repository triggers the GitHub Actions workflow.
 
-### Component Interaction   
 
-## Installation
+## Component Interaction   
+
 ```mermaid
-graph TD
+ graph TD
     A[User Request] --> B(yourDomain.com)
     B --> C{Cloudflare DNS}
     C -->|Tunnel Active| D[Cloudflare Edge]
@@ -110,6 +115,25 @@ graph TD
     E --> G[Router Port Forwarding]
     F & G --> H[XAMPP Server]
     H --> I[(HTML/CSS Assets)]
+    subgraph Monitoring Infrastructure
+        J[node_exporter] -- Collects System Metrics --> K(Prometheus)
+        L[prometheus-apache-exporter] -- Collects Apache Metrics --> K
+        K -- Stores Metrics --> M(Grafana)
+        M -- Visualizes Metrics --> N[Admin/User]
+    end
+    H -- Provides Status --> L
+    subgraph CI/CD Pipeline
+        O[Code Push to Main] --> P(GitHub Actions Workflow)
+        P --> Q{Checkout Code}
+        Q --> R{HTML Validation}
+        R --> S{Setup SSH}
+        S --> T{Validate Key}
+        T --> U{Test SSH Connection}
+        U --> V{Clean Server Directory}
+        V --> W{Deploy via rsync}
+        W --> X{Reload Apache}
+        X --> Y[Website Updated]
+    end 
 ```
 ### Prerequisites
 - Cloudflare account (with automated certificate management)
@@ -118,8 +142,13 @@ graph TD
 - Ubuntu 22.04 LTS
 - Prometheus installed and configured
 - Grafana installed and running
+- GitHub repository for your website
+- GitHub Actions enabled on your repository
+- SSH access to your home server
+- ```rsync``` installed on your local machine and the server
+- ```htmlhint``` installed (for HTML validation)
 
-### Installation & Configuration
+### Installation
 
 1. **XAMPP Installation**
 ```bash
@@ -183,6 +212,72 @@ Follow the official Grafana documentation for installation.
    sudo apt update
    sudo apt install prometheus-node-exporter
    ```
+9. **GitHub Actions CI/CD Pipeline:**
+ - Create a .github/workflows directory in your website's repository.
+
+ - Create a file named deploy.yml inside this directory with the following content:
+```yml
+   name: Deploy Website
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: HTML Validation
+        run: |
+          npm install -g htmlhint
+          htmlhint website/**/*.html
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Validate Key
+        run: |
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+            chmod 600 key.pem
+            ssh-keygen -l -f key.pem
+
+      - name: Test SSH Connection
+        run: |
+             ssh -vvv -o StrictHostKeyChecking=no \
+             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+             "echo 'Connection successful!'"
+
+      - name: Clean Server Directory
+        run: |
+               ssh -o StrictHostKeyChecking=no -tt ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo '$SUDO_PASSWORD' | sudo -S rm -rf /opt/lampp/htdocs/* && echo '$SUDO_PASSWORD' | sudo -S mkdir -p /opt/lampp/htdocs"
+
+        env:
+          SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
+
+      - name: Deploy
+        run: |
+            rsync -avz --delete -e "ssh" \
+              ./website/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/lampp/htdocs/
+
+      - name: Reload Apache
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "sudo /opt/lampp/lampp reloadapache"
+```
+
+- **Configure GitHub Secrets:** You will need to add the following secrets to your GitHub repository (Settings -> Secrets and variables -> Actions):
+
+   - ```SSH_PRIVATE_KEY:``` Your server's private SSH key.
+   - ```SSH_USER:``` The username for SSH access to your server.
+   - ```SSH_HOST:``` The IP address or hostname of your server.
+   - ```SUDO_PASSWORD:``` The sudo password for the user you are using for deployment. Use with caution and consider alternative methods for secure sudo access.
+
+
 ## Configuration
 1. **Prometheus Configuration (```prometheus.yml```):**
    Edit your Prometheus configuration file (usually located at ```/etc/prometheus/prometheus.yml```) to add jobs for the ```apache_exporter``` and the ```node_exporter```:
@@ -218,6 +313,43 @@ Follow the official Grafana documentation for installation.
 ```
 3. **Grafana Data Source:**
 - Add Prometheus as a data source in Grafana (e.g., http://localhost:9090).
+
+## CI/CD Pipeline
+This project utilizes GitHub Actions to automate the deployment of the website. Whenever a change is pushed to the main branch of the repository, the following steps are executed:
+
+1. **Checkout code:** The repository code is checked out to the GitHub Actions runner.
+2. **HTML Validation:** The HTML files in the website/ directory are validated using htmlhint to ensure they are well-formed.
+3. **Setup SSH:** An SSH agent is set up using the private SSH key stored as a GitHub secret (SSH_PRIVATE_KEY).
+4. **Validate Key:** The provided SSH private key is validated.
+5. **Test SSH Connection:** A test SSH connection is established to the server to verify connectivity.
+6. **Clean Server Directory:** The existing content in the /opt/lampp/htdocs/ directory on the server is removed. This step uses sudo and relies on the SUDO_PASSWORD stored as a GitHub secret.
+7. **Deploy:** The contents of the website/ directory in the repository are copied to the /opt/lampp/htdocs/ directory on the server using rsync over SSH.
+8. ***Reload Apache:** The Apache web server is reloaded on the server to apply the changes.
+This automated pipeline ensures that the website is updated quickly and efficiently whenever new changes are made to the codebase.
+
+## Grafana Dashboards
+
+Here are some screenshots of the Grafana dashboards used for monitoring:
+#### Linux Server Metrics Dashboard
+
+![Linux Server Metrics Dashboard Screenshot](./docs/CPU_Usage_time_series.png)
+![Linux Server Metrics Dashboard Screenshot](./docs/CPU_Usage_time_guage.png)
+![Linux Server Metrics Dashboard Screenshot](./docs/Memory_Usage_time_series.png)
+![Linux Server Metrics Dashboard Screenshot](./docs/Disk_Space_Usage_Root_time_series.png)
+![Linux Server Metrics Dashboard Screenshot](./docs/Memory_Usage_time_series.png)
+![Linux Server Metrics Dashboard Screenshot](./docs/Panel_for_Incoming_Traffic_tiime_series.png)
+![Linux Server Metrics Dashboard Screenshot](./docs/Panel_for_Incoming_Traffic_time_guage.png)
+![Linux Server Metrics Dashboard Screenshot](./docs/Panel_for_Outgoing_Traffic_time_series.png)
+![Linux Server Metrics Dashboard Screenshot](./docs/Panel_for_Outgoing_Traffic_time_guage.png)
+
+*This dashboard displays metrics for the underlying Linux server, including CPU usage, memory utilization, and disk I/O.*
+
+#### Apache Metrics Dashboard
+
+![Apache Metrics Dashboard Screenshot](./docs/apache_exporter_scrape_failures_total_time_series.png)
+![Apache Metrics Dashboard Screenshot](./docs/apache_exporter_scrape_failures_total_time_guage.png)
+
+
 
 ## Challenges & Solutions
 1. **CSS File Loading Issue**
@@ -284,10 +416,12 @@ sudo rm -rf /opt/lampp/phpmyadmin
 4. **Transport Layer**
 - Cloudflare SSL/TLS encryption
 - Automatic HTTPS redirects
+5. **Monitoring:** Prometheus and Grafana provide continuous monitoring of server resources and application health.
+7. **Automation:** GitHub Actions ensures secure and efficient deployment of website updates.
+
 
 ## Future Improvements
 - **HTTPS Setup:** Integrate Let’s Encrypt with Certbot for native SSL on Apache.
-- **Named Cloudflare Tunnel:** Transition from a trial tunnel to a custom domain setup for improved reliability.
 - **Docker Migration:** Explore containerization (e.g., using httpd:alpine) once hardware supports KVM or similar technology.
 - **Enhanced Monitoring:**
    - Implement uptime monitoring (e.g. Uptime Robot).
@@ -318,6 +452,11 @@ sudo tail -f /opt/lampp/logs/access_log
 - You can usually access the Prometheus web UI at ```http://your_server_ip:9090``` or ```http://localhost:9090``` if you are on the server.
 **Q: How do I access Grafana?**
 - Grafana typically runs on port 3000. You can access it in your web browser at http://your_server_ip:3000 or http://localhost:3000.
+**Q: How does the CI/CD pipeline work?**
+- The CI/CD pipeline is automated using GitHub Actions. Whenever code is pushed to the main branch, the workflow defined in .github/workflows/deploy.yml is triggered. This workflow checks out the code, validates the HTML, connects to your server via SSH, cleans the website directory, deploys the new code using rsync, and then reloads the Apache web server.
+
+
+
   
 ## License
 MIT License - See [LICENSE](/LICENSE) for details.
