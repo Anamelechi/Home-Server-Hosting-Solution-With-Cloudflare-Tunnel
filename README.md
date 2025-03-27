@@ -24,6 +24,8 @@ This project enables secure external access to a home-hosted static website thro
 - Cloudflare Tunnel (Argo Tunnel)
 - Custom Domain Integration
 - Systemd service management
+- Prometheus Monitoring
+- Grafana Visualization
 
 **Key Features**:
 - Bypasses ISP port blocking and CGNAT issues
@@ -31,16 +33,19 @@ This project enables secure external access to a home-hosted static website thro
 - Persistent tunnel connection via systemd service
 - Free SSL via Cloudflare
 - Automatic DNS updates via Cloudflare, with a free domain: **yourDomain.com**
+- Comprehensive server monitoring with Prometheus and Grafana
 
 ## Key Components
 
 | Component       | Technology           | Role                                                  |
 |-----------------|----------------------|-------------------------------------------------------|
 | **Web Server**  | XAMPP (Apache)       | Hosts and serves static website files                 |
-| **Dynamic DNS** | No-IP (noip2 client) | Maps your dynamic home IP to `No-ip.ddns.net`    |
+| **Dynamic DNS** | No-IP (noip2 client) | Maps your dynamic home IP to `No-ip.ddns.net`         |
 | **Tunneling**   | Cloudflare Tunnel    | Bypasses ISP restrictions and CGNAT                   |
 | **Security**    | Cloudflare Proxy & ufw | Encrypts traffic and filters network threats        |
-| **Monitoring**  | Apache Logs          | Tracks server access and error logging                |
+| **Logging**     | Apache Logs          | Tracks server access and error logging                |
+| **Monitoring**  | Prometheus & node_exporter | Collects metrics from Apache and the Linux server|
+| **Visualization** | Grafana            | Provides dashboards for visualizing collected metrics |
 
 
 ## Local Server Setup
@@ -70,6 +75,8 @@ This project enables secure external access to a home-hosted static website thro
 - **Cloudflare Security:**
   - SSL/TLS encryption ensures that data in transit is secure.
   - Cloudflare rules provide additional security, such as blocking malicious traffic and DDoS protection.
+-  **Enhanced Monitoring:**
+  - Prometheus and Grafana provide insights into server performance and potential issues. 
 
 ## Data Flow
 1. **User Request:**  
@@ -82,6 +89,13 @@ This project enables secure external access to a home-hosted static website thro
    XAMPP serves the requested static content (e.g., `index.html`, `styles.css`) from `/opt/lampp/htdocs/`.
 5. **Content Delivery:**  
    The user’s browser renders the HTML/CSS, displaying the website.
+6. **Monitoring Data Collection:**
+   - `node_exporter` collects system metrics from the Linux server.
+   - `prometheus-apache-exporter` attempts to collect metrics from the Apache web server's `/server-status` page.
+7. **Prometheus Storage:**
+    Prometheus scrapes and stores the collected metrics.
+8. **Grafana Visualization:**
+    Grafana queries Prometheus to display the metrics on dashboards.
 
 ### Component Interaction   
 
@@ -102,6 +116,8 @@ graph TD
 - No-IP account
 - Static website files
 - Ubuntu 22.04 LTS
+- Prometheus installed and configured
+- Grafana installed and running
 
 ### Installation & Configuration
 
@@ -151,6 +167,57 @@ sudo systemctl start cloudflared
 - Link your free domain (yourDomain.com) to Cloudflare.
 - Ensure Cloudflare’s nameservers are correctly set.
 - Configure the DNS records to point to your Cloudflare Tunnel.
+5. **Prometheus Installation:**
+Follow the official Prometheus documentation for installation.
+
+6. **Grafana Installation:**
+Follow the official Grafana documentation for installation.
+
+7. **Install prometheus-apache-exporter:**
+   ```bash
+   sudo apt update
+   sudo apt install prometheus-apache-exporter
+   ```
+8. **Install node_exporter:**
+   ```bash
+   sudo apt update
+   sudo apt install prometheus-node-exporter
+   ```
+## Configuration
+1. **Prometheus Configuration (```prometheus.yml```):**
+   Edit your Prometheus configuration file (usually located at ```/etc/prometheus/prometheus.yml```) to add jobs for the ```apache_exporter``` and the ```node_exporter```:
+   ```yaml
+   scrape_configs:
+    - job_name: 'apache'
+    static_configs:
+      - targets: ['localhost:9117']
+
+    - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
+   ```
+   - Restart the Prometheus service:
+   ```bash
+   sudo systemctl restart prometheus
+   ```
+
+2. **Apache Configuration (```httpd.conf``` and ```httpd-info.conf```):**
+
+- **Enable ```mod_status```:** Uncomment LoadModule ```status_module modules/mod_status.so``` in ```/opt/lampp/etc/httpd.conf```.
+
+- **Configure Status Page Access:** Edit ```/opt/lampp/etc/extra/httpd-info.conf```:
+```apache
+   <Location /server-status>
+      SetHandler server-status
+      Require local
+   </Location>
+```
+- Restart Apache:
+```bash
+  sudo /opt/lampp/lampp restartapache
+```
+3. **Grafana Data Source:**
+- Add Prometheus as a data source in Grafana (e.g., http://localhost:9090).
 
 ## Challenges & Solutions
 1. **CSS File Loading Issue**
@@ -187,6 +254,19 @@ journalctl -u cloudflared --since "5 minutes ago"
 dig yourDomain.com +short
 nslookup no-ipdns.ddns.net
 ```
+6. **Apache ```mod_status``` Configuration:**
+- **Issue:** Initially, the ```/server-status``` page was not accessible, resulting in the apache_exporter reporting the Apache server as down.
+- **Solutions Attempted:**
+- Ensured ```LoadModule status_module``` as uncommented in ```httpd.conf```.
+- Configured the ```<Location /server-status>``` block in ```httpd-info.conf``` with Require local and specific IP addresses.
+- Encountered "403 Forbidden" errors, indicating permission issues.
+- Encountered "Syntax error" related to ```mod_foo.so in httpd.conf``` (resolved by commenting out the line).
+- Encountered "Syntax error" related to mod_status in ```httpd-info.conf``` (resolved by moving the ```LoadModule``` directive in ```httpd.conf```).
+- Current Status: While Prometheus is now scraping some metrics from the ```apache_exporter```, the ```apache_up``` metric is still reporting 0, suggesting the exporter cannot reliably access the ```/server-status``` page. Further investigation into Apache's access permissions might be needed.
+
+**Current Status:** While Prometheus is now scraping some metrics from the ```apache_exporter```, the apache_up metric is still reporting 0, suggesting the exporter cannot reliably access the ```/server-status``` page. Further investigation into Apache's access permissions might be needed.
+
+
 ## Security Implementation
 ### Defense-in-Depth Strategy
 1. **Network Layer**
@@ -209,7 +289,11 @@ sudo rm -rf /opt/lampp/phpmyadmin
 - **HTTPS Setup:** Integrate Let’s Encrypt with Certbot for native SSL on Apache.
 - **Named Cloudflare Tunnel:** Transition from a trial tunnel to a custom domain setup for improved reliability.
 - **Docker Migration:** Explore containerization (e.g., using httpd:alpine) once hardware supports KVM or similar technology.
-- **Enhanced Monitoring:** Implement uptime monitoring (e.g. Prometheous, grafana loki, ELK slack and Uptime Robot) for real-time alerts.
+- **Enhanced Monitoring:**
+   - Implement uptime monitoring (e.g. Uptime Robot).
+   - Further troubleshoot and resolve the apache_exporter issue to gain insights into Apache performance.
+   - Explore setting up alerts in Prometheus and Grafana for critical metrics.
+   - Consider monitoring other aspects of the XAMPP stack (e.g., PHP-FPM if used).
 
 ## FAQ
 **Q: How do I rename an existing tunnel?**
@@ -230,9 +314,14 @@ sudo systemctl enable cloudflared
 ```bash
 sudo tail -f /opt/lampp/logs/access_log
 ```
+**Q: How do I access Prometheus?**
+- You can usually access the Prometheus web UI at ```http://your_server_ip:9090``` or ```http://localhost:9090``` if you are on the server.
+**Q: How do I access Grafana?**
+- Grafana typically runs on port 3000. You can access it in your web browser at http://your_server_ip:3000 or http://localhost:3000.
+  
 ## License
 MIT License - See [LICENSE](/LICENSE) for details.
 
-- **Author:** yourDomain Philip Njoku
+- **Author:** Anamelechi Philip Njoku
 - **Contact:** philznjoku@gmail.com
 - **Live Demo:** https://anamelechi.com
