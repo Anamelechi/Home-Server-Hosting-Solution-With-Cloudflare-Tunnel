@@ -430,29 +430,29 @@ sudo rm -rf /opt/lampp/phpmyadmin
    - Consider monitoring other aspects of the XAMPP stack (e.g., PHP-FPM if used).
 
 ## FAQ
-**Q: How do I rename an existing tunnel?**
+- **Q: How do I rename an existing tunnel?**
 **A:** Tunnels cannot be renamed. To change the name, create a new tunnel, update your DNS records, and delete the old tunnel.
 
-**Q: How do I ensure the tunnel survives reboots?**
+- **Q: How do I ensure the tunnel survives reboots?**
 **A:** The systemd service configuration ensures that the tunnel starts automatically on boot:
 ```bash
 sudo systemctl enable cloudflared
 ```
-**Q: Why use both No-IP and Cloudflare?**
+- **Q: Why use both No-IP and Cloudflare?**
 **A:**
 
 **No-IP:** Provides a fallback for dynamic DNS updates.
 **Cloudflare Tunnel:** Bypasses ISP restrictions (port blocking/CGNAT) and handles HTTPS termination with automated certificate renewal.
 
-**Q: How to monitor traffic?**
+- **Q: How to monitor traffic?**
 ```bash
 sudo tail -f /opt/lampp/logs/access_log
 ```
-**Q: How do I access Prometheus?**
+- **Q: How do I access Prometheus?**
 **A:** You can usually access the Prometheus web UI at ```http://your_server_ip:9090``` or ```http://localhost:9090``` if you are on the server.
-**Q: How do I access Grafana?**
+- **Q: How do I access Grafana?**
 **A:** Grafana typically runs on port 3000. You can access it in your web browser at http://your_server_ip:3000 or http://localhost:3000.
-**Q: How does the CI/CD pipeline work?**
+- **Q: How does the CI/CD pipeline work?**
 **A:** The CI/CD pipeline is automated using GitHub Actions. Whenever code is pushed to the main branch, the workflow defined in .github/workflows/deploy.yml is triggered. This workflow checks out the code, validates the HTML, connects to your server via SSH, cleans the website directory, deploys the new code using rsync, and then reloads the Apache web server.
 
 
