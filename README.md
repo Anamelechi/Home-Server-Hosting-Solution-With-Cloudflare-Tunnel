@@ -449,11 +449,11 @@ sudo systemctl enable cloudflared
 sudo tail -f /opt/lampp/logs/access_log
 ```
 **Q: How do I access Prometheus?**
-- You can usually access the Prometheus web UI at ```http://your_server_ip:9090``` or ```http://localhost:9090``` if you are on the server.
+**A:** You can usually access the Prometheus web UI at ```http://your_server_ip:9090``` or ```http://localhost:9090``` if you are on the server.
 **Q: How do I access Grafana?**
-- Grafana typically runs on port 3000. You can access it in your web browser at http://your_server_ip:3000 or http://localhost:3000.
+**A:** Grafana typically runs on port 3000. You can access it in your web browser at http://your_server_ip:3000 or http://localhost:3000.
 **Q: How does the CI/CD pipeline work?**
-- The CI/CD pipeline is automated using GitHub Actions. Whenever code is pushed to the main branch, the workflow defined in .github/workflows/deploy.yml is triggered. This workflow checks out the code, validates the HTML, connects to your server via SSH, cleans the website directory, deploys the new code using rsync, and then reloads the Apache web server.
+**A:** The CI/CD pipeline is automated using GitHub Actions. Whenever code is pushed to the main branch, the workflow defined in .github/workflows/deploy.yml is triggered. This workflow checks out the code, validates the HTML, connects to your server via SSH, cleans the website directory, deploys the new code using rsync, and then reloads the Apache web server.
 
 
 
